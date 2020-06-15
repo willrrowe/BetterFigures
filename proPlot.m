@@ -190,13 +190,13 @@ classdef proPlot
                 
                 % load the correct axis (create one if needed)
                 for ii=1:2
-                    field = strcat("axis",num2str(ii));
+                    options = strcat("axis",num2str(ii));
                     if( obj.data{ind}.Axis ==ii)
-                        if(numel(obj.(field))==0)
-                            obj.(field) = axes();
-                            set(obj.(field), 'Units', get(obj.fig, 'Units') );
+                        if(numel(obj.(options))==0)
+                            obj.(options) = axes();
+                            set(obj.(options), 'Units', get(obj.fig, 'Units') );
                         else
-                            axes(obj.(field));
+                            axes(obj.(options));
                         end
                         obj = obj.applyAxisOptions( ii );
                     end
@@ -256,11 +256,12 @@ classdef proPlot
                    end
                elseif(strcmpi(PlotType, "image"))
                    [imageData,cm]=imread(obj.data{ind}.ImageFile);
-%                    p=imshow(imageData, cm);
                     p=image(flipud(imageData));
                     colormap(cm);
                     axis image
                else
+                   % Plotting for any other plotType not explicitly given
+                   % above
                    try
                         fh = str2func(PlotType);
                         if(numel(obj.data{ind}.y)>0)
@@ -286,10 +287,10 @@ classdef proPlot
             % make all axes fill the set positon
             for jj=1:2
             for ii=1:2
-                field = strcat("axis",num2str(ii));
-                if(numel(obj.(field)>0))
+                options = strcat("axis",num2str(ii),"Options");
+                if(numel(obj.(options))>0)
                     obj = obj.applyAxisOptions( ii );
-                    obj = obj.axisFillPosition(obj.(field));
+                    obj = obj.axisFillPosition(obj.(strcat("axis",num2str(ii))));
                 end
             end
             end
@@ -323,6 +324,9 @@ classdef proPlot
             % specified by axisInd
             
             axisField = strcat("axis", num2str(axisInd));
+            if(axisInd == 2 && numel(obj.(axisField)) == 0)
+                obj = obj.addAxis2();
+            end
             ax = obj.(axisField);
             
             set(ax, 'XTickMode', 'auto');
@@ -393,7 +397,7 @@ classdef proPlot
             for ii = 1:numel(Ticks)
                 field = Ticks{ii};
                 if(strcmp(ax.(strcat(field,'Mode')), 'auto'))
-                    if(numel(ax.(field)) >= 7)
+                    if(numel(ax.(field)) >= 6)
                         ax.(field) = ax.(field)(1:2:end);
                     end
                 end
@@ -408,6 +412,7 @@ classdef proPlot
              % This is useful if you want to plot some data with two x-axes
              % (i.e. with difference scales) see examples.m>Example8.
              
+            figure(obj.fig);
             obj.axis2 = axes();
             set(obj.axis2, 'Units', obj.figOptions.Units);
          end

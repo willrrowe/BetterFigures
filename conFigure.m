@@ -90,6 +90,10 @@ classdef conFigure
                 obj.proPlotArray(ii).axis2=[];
                 obj.proPlotArray(ii).fig = gcf;
                 obj.proPlotArray(ii) = obj.proPlotArray(ii).plotData([], false, false);
+%                 if(numel(obj.proPlotArray(ii).axis2Options())>0)
+%                     obj.proPlotArray(ii).addAxis2();
+%                     obj.proPlotArray(ii) = obj.proPlotArray(ii).plotData([], false, false);
+%                 end
                 if(obj.options.Labels)
                     LabelString = strcat(obj.options.LabelEnds(1), obj.options.LabelOrder(ii), obj.options.LabelEnds(2));
                     obj.proPlotArray(ii).addLabel(LabelString);
