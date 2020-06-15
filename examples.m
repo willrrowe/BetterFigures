@@ -39,8 +39,8 @@ pp2.plotData();
 % is not downsampled
 figure(3)
 pp3=proPlot(x,y,z,'PlotType','surf');
-pp3=pp3.changeAxisOptions('XLabelText', '$x$ displacement [mm]',...
-                          'YLabelText', '$y$ displacement [mm]',...
+pp3=pp3.changeAxisOptions('XLabelText', '$x$ displacement [km]',...
+                          'YLabelText', '$y$ displacement [km]',...
                           'ZLabelText', 'Hight above sea level [km]');
 pp3.plotData();
 %% Example 4
@@ -60,7 +60,7 @@ pp4.plotData();
 %% Example 5
 % Image
 figure(5)
-pp5 = proPlot([], [], [], 'PlotType','Image', 'ImageFile', 'proPlot\testImage.jpg');
+pp5 = proPlot([], [], [], 'PlotType','Image', 'ImageFile', 'betterFigures\testImage.jpg');
 % Change the aspect ratio to that of the image so that it fills the figure
 pp5.changeFigOptions('Height',12,...
                      'Width',16);
@@ -168,6 +168,7 @@ CF = conFigure([pp7,pp4,pp5,pp10],2,2, 'UniformPlots', true, 'Width', 20);
 
 
 %% Example 14
+% Line plot with scattered data and error bars
 figure(14);
 x = 0.1:0.05:10*pi;
 y = sin(x)./x;
