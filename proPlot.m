@@ -36,8 +36,6 @@ classdef proPlot
             if(nargin<3)
                 z=[];
             end
-            obj.fig = gcf;
-            clf(obj.fig);
 
             if(numel(varargin)>0)
                 if(strcmpi(varargin{1}, "PlotType"))
@@ -53,7 +51,6 @@ classdef proPlot
                 obj = obj.loadOptionSet("Default");
             end
 
-            obj = obj.applyFigOptions();
             obj = obj.addData(x, y, z, varargin{1:end});
         end
         
@@ -135,7 +132,7 @@ classdef proPlot
 
             obj.figOptions = updateStruct(obj.figOptions, varargin{1:end});
             
-            obj = obj.applyFigOptions();
+%             obj = obj.applyFigOptions();
             if(obj.InstaPlot)
                 obj = obj.plotData();
             end
@@ -173,9 +170,12 @@ classdef proPlot
             % plotInsets - boolean - default true - whether to plot any
             % insets that have been specified
             
-%             figure(obj.fig);
-%             clf(obj.fig);
-            
+            if(numel(obj.fig)==0)
+                obj.fig = gcf;
+                clf(obj.fig);
+                obj = obj.applyFigOptions();
+            end            
+
             if(nargin<2||numel(range)==0)
                 range = 1:numel(obj.data);
             end
@@ -190,13 +190,13 @@ classdef proPlot
                 
                 % load the correct axis (create one if needed)
                 for ii=1:2
-                    options = strcat("axis",num2str(ii));
+                    ax = strcat("axis",num2str(ii));
                     if( obj.data{ind}.Axis ==ii)
-                        if(numel(obj.(options))==0)
-                            obj.(options) = axes();
-                            set(obj.(options), 'Units', get(obj.fig, 'Units') );
+                        if(numel(obj.(ax))==0)
+                            obj.(ax) = axes();
+                            set(obj.(ax), 'Units', get(obj.fig, 'Units') );
                         else
-                            axes(obj.(options));
+                            axes(obj.(ax));
                         end
                         obj = obj.applyAxisOptions( ii );
                     end
@@ -287,8 +287,8 @@ classdef proPlot
             % make all axes fill the set positon
             for jj=1:2
             for ii=1:2
-                options = strcat("axis",num2str(ii),"Options");
-                if(numel(obj.(options))>0)
+                ax = strcat("axis",num2str(ii),"Options");
+                if(numel(obj.(ax))>0)
                     obj = obj.applyAxisOptions( ii );
                     obj = obj.axisFillPosition(obj.(strcat("axis",num2str(ii))));
                 end
@@ -471,7 +471,6 @@ classdef proPlot
              left = obj.pos(1) + ti(1) + obj.figOptions.Padding(1);
              bottom = obj.pos(2) + ti(2) + obj.figOptions.Padding(2);
              ax_width = obj.pos(3) - ti(1) - ti(3) - (obj.figOptions.Padding(1)+obj.figOptions.Padding(3));
-            %      ax_height = pos(4) - ti(4);
              ax_height = obj.pos(4) - ti(2) - ti(4) - (obj.figOptions.Padding(2)+obj.figOptions.Padding(4));
              ax.Position = [left bottom ax_width ax_height];
 
@@ -490,12 +489,13 @@ classdef proPlot
         end
         
         function obj = addInset(obj, inset, position)
-        % addInset(inset, pos) - Adds the proPlot object inset at the
-        % position pos. (i.e. like a figure inset)
+        % addInset(inset, pos) - Adds an inset to the plot
+        % inset - The proPlot instance to add as the inset
+        % positon - [x y w h] The position of the inset relative to axis1
+        %           of the parent plot. x and y are the coordinates of the
+        %           lower left corner of the inset. w and h are the width
+        %           and height of the inset in the axis units.
 
-            figure(obj.fig);
-            
-            inset.fig = obj.fig;
             inset.insetPos = position;
             
             obj.insetArray = [obj.insetArray, inset];
@@ -510,6 +510,7 @@ classdef proPlot
         % object.
             ax = obj.axis1;
             for ii = 1:numel(obj.insetArray)
+                obj.insetArray(ii).fig = obj.fig;
                 set(gcf, 'CurrentAxes', ax);
                 obj.insetArray(ii).axis1 = [];
                 obj.insetArray(ii).axis2 = [];
