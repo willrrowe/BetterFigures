@@ -20,3 +20,8 @@ See example.m in the BetterFigures folder for practical examples of how to use b
 Use the MATLAB help command followed by function names for more information.
 proPlotOptions and conFigureOptions are functions that can be edited by the user to set their own default settings for proPlot and conFigure respectively. The help text for these functions explains the usage of the most common options for proPlot and conFigure.
 
+- Saving figures
+Once you have produced your figure you may want to save/export it as an image. BetterFigures doesn't do this but I would recommend using 'export_fig' which is available from https://github.com/altmany/export_fig.
+A typical usage would be "export_fig("figure1.png") to save the current figure as figure1.png.
+Add the option "-r600" for higher quality bitmaps, the number following the -r is the dpi (default is 300dpi)
+If you find the figure doesn't save exactly as you expect try using differend renderer using one of "-painters", "-opengl" or "-zbuffer" options as seen if this improves things.
