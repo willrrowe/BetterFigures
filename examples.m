@@ -197,8 +197,45 @@ figure(14);
 pp14.plotData();
 
 
-%%
-for ii = 1:14
-    figure(ii)
-    export_fig(strcat('figure',num2str(ii),'.png'), '-r600')
-end
+%% Example 15
+% Specific example for Physics/Photonics
+% A graph with two x-axes, one showing frequency, the other wavelength
+c = 3*10^8; % Speed of light in a vacuum [m/s]
+lam = (0.5:0.01:2)*10^-6; % lambda, wavelength [m]
+om = 2*pi*c./lam; % omega, angular frequency [rad/s]
+
+% Define Selmeirs eqn for bulk fused silica (Agrawal Nonlinear Fibre
+% Optics) 
+B_j = transpose([0.6961663, 0.4079426, 0.8974794]);
+lam_j = transpose([0.0684043, 0.1162414, 9.896161])*10^-6; % resonance wavelengths
+om_j = 2*pi*c./lam_j; % resonances angular frequencies
+n = sqrt(1 + sum(  B_j.*om_j.^2./(om_j.^2 - om.^2 ), 1  )   ); % refractive index
+
+% Both x-axes will be in units of wavelength with the same limits. 
+% On axis 2 we will define the positions for tick marks in freq and convert
+% them to wavelength to position them on the axis. The labels for these 
+% ticks will be set using the in frequency. The result will be an axis with
+% ticks marked in frequency but correctly positioned in wavelength
+x_lim = [lam(1), lam(end)]*10^9; % x limits for both axes
+x_ticks_freq = (5:-1:1)*10^14;   % define the x ticks you want in freq
+x_tick_labels = string(x_ticks_freq*10^-12); % tick labels as strings
+x_ticks_lam = (c./x_ticks_freq)*10^9; % convert x ticks to wavelength
+
+% Plot refractive index against wavelength
+pp15 = proPlot(lam*10^9, n);
+pp15 = pp15.changeAxisOptions('XLabelText', 'Wavelength, $\lambda$ (nm)',...
+                              'YLabelText', 'Refractive index, $n$',...
+                              'XLim', x_lim);
+pp15 = pp15.changeAxisOptions('Axis', 2,...
+                              'XAxisLocation', 'Top',...
+                              'YColor','none',... % hide the second y-axis as we do not require it
+                              'XLim', x_lim,... 
+                              'XTick', x_ticks_lam,...
+                              'XTickLabel', x_tick_labels,...
+                              'XLabelText', 'Frequency, $f$ (THz)');
+
+figure(15)
+pp15.plotData();
+
+
+
