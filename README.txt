@@ -8,7 +8,7 @@ Download the files and add them to the MATLAB path.
 1 - Download zip folder from https://github.com/willrrowe/betterFigures > click “Code” > click “Download Zip”
 2 - Unzip and copy the “BetterFigures” folder to a suitable location. “Documents/MATLAB” is a sensible choice.
 3- Add BetterFigures to the MATLAB path. 
-To do this permanently, in the MATLAB command window run the command “edit startup”. The MATLAB startup.m file should open in the editor. Add the line “addpath(PATH)” where PATH is a string containing the path to the BetterFigures folder. For me this line look like “addpath('C:\Users\Will\Documents\MATLAB\betterFigures')”. Save the startup.m file and restart MATLAB. 
+To do this permanently, in the MATLAB command window run the command “edit startup” (if this doesn't already exist you will need to create this file, the best place for this is in the MATLAB folder in Documents). The MATLAB startup.m file should open in the editor. Add the line “addpath(PATH)” where PATH is a string containing the path to the BetterFigures folder. For me this line look like “addpath('C:\Users\Will\Documents\MATLAB\betterFigures')”. Save the startup.m file and restart MATLAB. 
 4 - You are now ready to use BetterFigures.
 
 - Usage:
