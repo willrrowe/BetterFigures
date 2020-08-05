@@ -8,7 +8,7 @@ clc;
 x = 0.1:0.05:10*pi;
 y = sin(x)./x;
 pp1 = proPlot(x, y);
-pp1 = pp1.addData(x(1:10:end),y(1:10:end), [], 'PlotType', 'scatter', 'CData', [238, 102, 119]/255);
+pp1 = pp1.addData(x(1:10:end),y(1:10:end), 'PlotType', 'scatter', 'CData', [238, 102, 119]/255);
 
 % Axis labels and tick marks are changed from their defaults
 pp1 = pp1.changeAxisOptions('XLabelText', 'Phase, $\phi$ [rad]',...
@@ -50,7 +50,7 @@ pp3.plotData();
 % Fill
 x = [1,2,3,4,5,4,3,2,1];
 y = [1,2,3,4,5,6,7,8,9];
-pp4 = proPlot(x, y, [], 'PlotType','Fill', 'FaceAlpha', 0.8);
+pp4 = proPlot(x, y, 'PlotType','Fill', 'FaceAlpha', 0.8);
 pp4 = pp4.addData(x, y+1, [], 'PlotType','Fill', 'FaceAlpha', 0.8);
 pp4 = pp4.addData(x, y+2, [], 'PlotType','Fill', 'FaceAlpha', 0.8);
 pp4 = pp4.addData(x, y+3, [], 'PlotType','Fill', 'FaceAlpha', 0.8);
@@ -63,7 +63,7 @@ pp4.plotData();
 
 %% Example 5
 % Image
-pp5 = proPlot([], [], [], 'PlotType','Image', 'ImageFile', 'betterFigures\testImage.jpg');
+pp5 = proPlot('PlotType','Image', 'ImageFile', 'betterFigures\testImage.jpg');
 % Change the aspect ratio to that of the image so that it fills the figure
 pp5.changeFigOptions('Height',12,...
                      'Width',16);
@@ -95,7 +95,7 @@ y = [1,2,3,4,5];
 pp7 = proPlot(x, y);
 pp7 = pp7.addData(x,y+1);
 pp7 = pp7.addData(x,y-1);
-pp7 = pp7.addData(x+1,y+0.5, [], 'Axis',2, 'Color', [238, 102, 119]/255);
+pp7 = pp7.addData(x+1,y+0.5, 'Axis',2, 'Color', [238, 102, 119]/255);
 pp7 = pp7.changeAxisOptions('Axis',2,...
                           'YAxisLocation','right',...
                           'XAxisLocation','top',...
@@ -132,7 +132,7 @@ y = [1,2,3,4,5];
 pp9 = proPlot(x, y);
 pp9 = pp9.addData(x,y+1);
 pp9 = pp9.addData(x,y-1);
-pp9 = pp9.addData(x+1,y+0.5, [],'Axis', 2, 'Color', 'k');
+pp9 = pp9.addData(x+1, y+0.5, 'Axis', 2, 'Color', 'k');
 pp9 = pp9.changeAxisOptions('Axis',2,...
                       'YAxisLocation','right',...
                       'YLabelText', 'right $y$ label',...
@@ -174,10 +174,11 @@ CF = conFigure([pp7,pp4,pp5,pp10],2,2, 'UniformPlots', true, 'Width', 20);
 
 %% Example 14
 % Line plot with scattered data and error bars
+% This example also includes a legend
 x = 0.1:0.05:10*pi;
 y = sin(x)./x;
 pp14 = proPlot(x, y);
-pp14 = pp14.addData(x(1:10:end),y(1:10:end), [],...
+pp14 = pp14.addData(x(1:10:end),y(1:10:end),...
                     'PlotType', 'scatter',...
                     'CData', [238, 102, 119]/255);
 pp14 = pp14.addData(x(1:10:end),y(1:10:end), y(1:10:end)*0.1,...
@@ -191,7 +192,8 @@ pp14 = pp14.changeAxisOptions('XLabelText', 'Phase, $\phi$ [rad]',...
                             'YLabelText', 'Amplitude, $A$ [a.u.]',...
                             'XTick', [0,2*pi,4*pi,6*pi,8*pi,10*pi],...
                             'XTickLabel', ["0","$2\pi$","$4\pi$","$6\pi$","$8\pi$","$10\pi$"],...
-                            'XLim',[0,10*pi]);
+                            'XLim',[0,10*pi],...
+                            'LegendLabels', ["Errors","Model", "Data"]);
                         
 figure(14);
 pp14.plotData();
