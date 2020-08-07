@@ -257,9 +257,13 @@ classdef proPlot
                         p=annotation(annType, X, Y, 'String', obj.data{ind}.String, 'Interpreter', obj.figOptions.LabelInterpreter);
                    end
                elseif(strcmpi(PlotType, "image"))
-                   [imageData,cm]=imread(obj.data{ind}.ImageFile);
-                    p=image(flipud(imageData));
-                    colormap(cm);
+                   if( numel(obj.data{ind}.x)>0)
+                        p=image(flipud(obj.data{ind}.x));
+                   else 
+                        [imageData,cm]=imread(obj.data{ind}.ImageFile);
+                        p=image(flipud(imageData));
+                        colormap(cm);
+                   end
                     axis image
                else
                    % Plotting for any other plotType not explicitly given
