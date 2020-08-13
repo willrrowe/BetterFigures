@@ -249,11 +249,11 @@ classdef proPlot
                         p=annotation(annType, axis2FigRelativePos(obj.data{ind}.x ), 'String', obj.data{ind}.String, 'Interpreter', obj.figOptions.LabelInterpreter);
                    elseif(any(strcmpi(annType, ["line", "arrow", "doublearrow"])))
                        % x and y are beginign/end coords for lines
-                       [X, Y] = axis2FigRelativeXY(obj.data{ind}.x, obj.data{ind}.y);
+                       [X, Y] = axis2FigRelativeXY(obj.data{ind}.x, obj.data{ind}.y, [], obj.(strcat('axis',num2str(obj.data{ind}.Axis)) ) );
                         p=annotation(annType, X, Y);
                    elseif(strcmpi(annType, "textarrow"))
                        % x and y are beginign/end coords for lines
-                       [X, Y] = axis2FigRelativeXY(obj.data{ind}.x, obj.data{ind}.y);
+                       [X, Y] = axis2FigRelativeXY(obj.data{ind}.x, obj.data{ind}.y, [], obj.(strcat('axis',num2str(obj.data{ind}.Axis)) ) );
                         p=annotation(annType, X, Y, 'String', obj.data{ind}.String, 'Interpreter', obj.figOptions.LabelInterpreter);
                    end
                elseif(strcmpi(PlotType, "image"))
@@ -280,7 +280,9 @@ classdef proPlot
                            p = fh(obj.data{ind}.x);
                        end
                    catch e
-                       warning(e.identifier, '%s', e.message);
+                       if(~strcmp(PlotType, "Annotation") )
+                            warning(e.identifier, '%s', e.message);
+                       end
                    end
                    
                end
@@ -493,9 +495,9 @@ classdef proPlot
             for ind = 1:numel(obj.data)
                 if(strcmpi(obj.data{ind}.PlotType,'Annotation'))
                     
-                    if(obj.InstaPlot)
-                        obj = obj.plotData(ind);
-                    end
+%                     if(obj.InstaPlot)
+                        obj = obj.plotData(ind, false, true);
+%                     end
                 end
             end
         end
@@ -565,14 +567,16 @@ Pos = [Xtmp(1), Ytmp(1), Xtmp(2)-Xtmp(1), Ytmp(2)-Ytmp(1)];
 
 end
 
-function [X, Y] = axis2FigRelativeXY(Xdata, Ydata, units)
+function [X, Y] = axis2FigRelativeXY(Xdata, Ydata, units, ax )
 % Changes X and Y coordinates relative to an axis to be relative to
 % a figures coordinates. Units are the units of the figure.
-if(nargin<3)
+if(nargin<3 || numel(units)==0)
     units="normalized";
 end
+if(nargin<4)
+    ax = gca;
+end
 
-ax=gca;
 oldunits = get(ax, 'Units');
 set(ax, 'Units', units);
 axpos = get(ax,'Position');

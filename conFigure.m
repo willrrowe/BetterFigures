@@ -50,7 +50,7 @@ classdef conFigure
             obj = obj.plotProPlotArray();
             
             if(obj.options.UniformPlots)
-                ti = max(obj.tightInsetArray);
+                ti = max(obj.tightInsetArray, [], 1);
                 for ii = 1:numel(obj.proPlotArray)
                     obj.proPlotArray(ii).TightInset = ti;
                     for jj = 1:2
